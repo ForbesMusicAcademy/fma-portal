@@ -8,9 +8,9 @@
 <title>Lesson times · Forbes Music Academy</title>
 <!--
   portal.forbesmusic.com.au/times/?t=<PortalToken>
-  Shows the family's term-times page (Apps Script, "Term times check-in"
-  deployment, portal-scripts/portal_times.js in the private workspace)
-  inside this page, so the address bar stays on forbesmusic.com.au.
+  Forwards to the family's term-times page (Apps Script, "Term times
+  check-in" deployment, portal-scripts/portal_times.js in the private
+  workspace), so the link parents get is a short forbesmusic.com.au one.
   No student data lives here: the token only travels in the family's own
   link and is passed straight through to the script.
 -->
@@ -26,11 +26,11 @@
   var APP = 'https://script.google.com/macros/s/AKfycbzkM0Cgx9lvClzVTrdvzZJjuhiz3uFt9AIRGturuRFd73xCqf-VTfBaH6Tj0qX9ZEUX/exec';
   var t = new URLSearchParams(location.search).get('t') || '';
   if (/^[A-Za-z0-9-]{8,64}$/.test(t)) {
-    var f = document.createElement('iframe');
-    f.src = APP + '?times=' + encodeURIComponent(t);
-    f.title = 'Lesson times';
-    f.allow = 'clipboard-write';
-    document.body.appendChild(f);
+    // Forward rather than embed: an Apps Script page inside an iframe on
+    // another domain can render blank when the browser blocks third-party
+    // cookies (Safari on iPhone does by default). replace() keeps this page
+    // out of the back history.
+    location.replace(APP + '?times=' + encodeURIComponent(t));
   } else {
     document.body.innerHTML = '<div class="msg"><img src="https://images.squarespace-cdn.com/content/v1/6a33cfe198212b58a6deaf75/a9409f0f-e510-4d9d-82cf-6c42a8f7e9f0/New+Logo+-+TRANSPARENT.png?format=1500w" alt="Forbes Music Academy">' +
       '<p>This link looks incomplete. Please open it straight from your email, or reply to Dave and he’ll send it again.</p></div>';
